@@ -73,7 +73,7 @@ test.only('UI Controls', async ({page})=> {
 
 
 
-test.only('Child windows', async ({browser})=> {
+test('Child windows', async ({browser})=> {
 
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -92,7 +92,9 @@ test.only('Child windows', async ({browser})=> {
 
     page.locator("#username").fill(domain);
     await page.pause();
-    console.log(await page.locator("#username").inputValue());
+    console.log(await page.locator("#username").inputValue()); // textContent() only works for text that is populated on the page by default -> not user input values
+
+
 
 
 
