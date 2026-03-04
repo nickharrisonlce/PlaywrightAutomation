@@ -70,3 +70,31 @@ test.only('UI Controls', async ({page})=> {
     await expect(documentLink).toHaveAttribute("Class", "blinkingText");
 
 });
+
+
+
+test.only('Child windows', async ({browser})=> {
+
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    const documentLink = page.locator("[href*='documents']");
+    
+    const [newPage] = await Promise.all([ // waits for both steps/promises to be fulfilled -- other options are pending and rejected
+        context.waitForEvent('page'), // listen for any new page to open
+        documentLink.click(),
+    ])
+    
+    const text = await newPage.locator('.red').textContent();
+    const arrayText = text.split("@");
+    const domain = arrayText[1].split(" ")[0];
+    console.log(domain);
+
+    page.locator("#username").fill(domain);
+    await page.pause();
+    console.log(await page.locator("#username").inputValue());
+
+
+
+
+});
