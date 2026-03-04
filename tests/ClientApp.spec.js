@@ -40,6 +40,17 @@ test('@Web Client App login', async ({ page }) => {
    //await page.pause();
 
    
+   const ccInput = page.locator('div.field', {has: page.locator('div.title', {hasText: 'Credit Card Number'})}).locator('input');
+   await ccInput.fill('4542 9931 9292 2293');
+
+   const expiryDropdowns = await page.locator("div.field.small", {has: page.locator('div.title', {hasText: "Expiry Date"})});
+   const monthDropdown = expiryDropdowns.locator("select.input.ddl").first();
+   const dayDropdown = expiryDropdowns.locator("select.input.ddl").nth(1);
+
+   await expect(monthDropdown).toBeVisible();
+   await monthDropdown.selectOption({label: "05"});
+   await dayDropdown.selectOption({label: "14"});
+   await page.pause();
    
 
  
