@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 const config = ({
   testDir: './tests',
-  timeout: 40 * 1000,
+  timeout: 20 * 1000,
   expect : {
      timeout: 5*1000,
   },
@@ -14,7 +14,7 @@ const config = ({
     browserName : 'chromium',
     headless : false,
     screenshot : 'on',
-    trace : 'retain-on-failure', // or 'off' or 'on'
+    trace : 'on', // or 'off' or 'on'
     
   },
 
