@@ -12,16 +12,21 @@ test('example test with notes', async ()=> {
 });
 
 
-test('Browser context Playwright test', async ({browser})=> {
+test.only('Browser context Playwright test', async ({browser})=> {
     //chrome may automatically have plugins/cookies - we need to create a fresh context (alomst like incognito)
     
     const context = await browser.newContext();
     const page = await context.newPage();
 
+    // page.route('**/*.{jpg, png, jpeg}', route => route.abort());
+
     const userName = page.locator('#username');
     const signIn = page.locator("#signInBtn");
 
     const cardTitles = page.locator(".card-body a");
+
+    page.on('request', request => console.log(request.url()));
+    page.on('response', response => console.log(response.url(), response.status()));
 
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     await page.locator('#username').fill("rahulshetty"); // use fill, type is deprecated
@@ -47,7 +52,7 @@ test('Browser context Playwright test', async ({browser})=> {
 });
 
 
-test.only('UI Controls', async ({page})=> {
+test('UI Controls', async ({page})=> {
     
      await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     const userName = page.locator('#username');
