@@ -99,10 +99,4 @@ test("assignment4", async ({ page, browser }) => {
     await expect(pageUser2.locator("p:has-text('You are not authorized to view this booking.')")).toBeVisible();
     await pageUser2.pause();
 
-
-
-
-
-
-
 })
