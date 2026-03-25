@@ -91,9 +91,6 @@ test("assignment4", async ({ page, browser }) => {
         route => route.continue({ url: 'https://api.eventhub.rahulshettyacademy.com/api/bookings/' + bookingId })
     );
 
-    console.log(bookingId);
-
-    // Now navigate to bookings
     await pageUser2.goto("https://eventhub.rahulshettyacademy.com/bookings/");
     await pageUser2.waitForLoadState("networkidle");
     await pageUser2.locator("button:has-text('View')").first().click();
