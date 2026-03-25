@@ -65,9 +65,11 @@ test("assignment4", async ({ page, browser }) => {
     });
 
     const bookingJson = await booking.json();
-    const bookingId = bookingJson.id;
-    //console.log(bookingJson);
+    const bookingId = bookingJson.data.id;
+    console.log(bookingJson);
     expect(booking.status()).toBe(201);
+
+
 
 
     //replace this with the helper function
@@ -77,19 +79,28 @@ test("assignment4", async ({ page, browser }) => {
     expect(loginResponse2.status()).toBe(200);
     const token2 = loginResponseJson2.token;
 
-
     const contextUser2 = await browser.newContext();
     const pageUser2 = await contextUser2.newPage();
+    await pageUser2.goto("https://eventhub.rahulshettyacademy.com");
 
-
-    await pageUser2.addInitScript((t) => {
-        window.localStorage.setItem("token", t);
+    await pageUser2.evaluate((t) => {
+        window.localStorage.setItem("eventhub_token", t);
     }, token2);
 
-    await pageUser2.goto("https://eventhub.rahulshettyacademy.com/bookings");
+    await pageUser2.route("https://api.eventhub.rahulshettyacademy.com/api/bookings/*",
+        route => route.continue({ url: 'https://api.eventhub.rahulshettyacademy.com/api/bookings/' + bookingId })
+    );
+
+    console.log(bookingId);
+
+    // Now navigate to bookings
+    await pageUser2.goto("https://eventhub.rahulshettyacademy.com/bookings/");
+    await pageUser2.waitForLoadState("networkidle");
+    await pageUser2.locator("button:has-text('View')").first().click();
+
+    await expect(pageUser2.locator("h3:has-text('Access Denied')")).toBeVisible();
+    await expect(pageUser2.locator("p:has-text('You are not authorized to view this booking.')")).toBeVisible();
     await pageUser2.pause();
-
-
 
 
 
