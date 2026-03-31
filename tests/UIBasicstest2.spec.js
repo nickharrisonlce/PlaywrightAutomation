@@ -12,7 +12,7 @@ test('example test with notes', async ()=> {
 });
 
 
-test.only('Browser context Playwright test', async ({browser})=> {
+test('Browser context Playwright test', async ({browser})=> {
     //chrome may automatically have plugins/cookies - we need to create a fresh context (alomst like incognito)
     
     const context = await browser.newContext();

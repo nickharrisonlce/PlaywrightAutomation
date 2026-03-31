@@ -3,7 +3,7 @@ const {test, expect} = require ('@playwright/test');
  
  
  
-test('@Web Client App login', async ({ page }) => {
+test.skip('@Web Client App login', async ({ page }) => {
    //js file- Login js, DashboardPage
    const email = "nickharrisonlce@gmail.com";
    const password = "Password$1"

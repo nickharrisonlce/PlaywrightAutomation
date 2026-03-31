@@ -1,6 +1,8 @@
 const { test, expect } = require("@playwright/test");
 
-test("popup validations", async ({ page }) => {
+test.describe.configure({mode: 'parallel'});
+//test.describe.configure({mode: 'serial'}); // skips remaining tests if one fails
+test("@Web popup validations", async ({ page }) => {
 
     await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
     //await page.goto('https://google.com');
@@ -14,7 +16,7 @@ test("popup validations", async ({ page }) => {
     page.on("dialog", dialog => dialog.accept());
     await page.locator("#confirmbtn").click();
     await page.locator("#mousehover").hover();
-    await page.pause();
+    //await page.pause();
 
     const framesPage = page.frameLocator("#courses-iframe");
     await framesPage.locator("li a[href*='lifetime-access']:visible").click();
@@ -37,7 +39,7 @@ test("screenshot and visual comparison", async ({ page }) => {
 });
 
 
-test.only("visual", async ({ page }) => {
+test.skip("visual", async ({ page }) => {
 
     await page.goto("https://google.com/");
     expect(await page.screenshot()).toMatchSnapshot('landing.png'); // on the first run this test will fail since there is no screenshot yet

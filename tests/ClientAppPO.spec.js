@@ -127,7 +127,7 @@ for (const data of dataSet) {
 }
 
 
-   customTest.only(`Client App login`, async ({ page, testDataForOrder }) => {
+   customTest(`Client App login`, async ({ page, testDataForOrder }) => {
       //js file- Login js, DashboardPage
       const poManager = new POManager(page);
       // const email = "nickharrisonlce@gmail.com";
