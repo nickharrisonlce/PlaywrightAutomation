@@ -1,0 +1,6 @@
+[ 'ADIDAS ORIGINAL', 'ZARA COAT 3', 'iphone 13 pro' ]
+ | 69cd28c4f86ba51a653df047 | 
+69cd28c4f86ba51a653df047
+7
+69cd28c4f86ba51a653df047
+The order was found at the following row: 0

@@ -13,7 +13,7 @@ test.beforeAll(async()=>{
 });
  
 
-test('Place the order', async ({ page }) => {
+test('@API Place the order', async ({ page }) => {
 
     const email = "nickharrisonlce@gmail.com";
     await page.addInitScript(value => {  // this is as if a function is created f(value) -         <------- personal syntax notes

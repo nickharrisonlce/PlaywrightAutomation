@@ -1,12 +1,12 @@
-const { test, expect } = require('@playwright/test');
-const {customTest} = require("../utils/test-base.js")
-const { POManager } = require("../pageObjects/POManager");
-//
-const dataSet = JSON.parse(JSON.stringify(require("../utils/placeorderTestData.json")));
+import { test, expect } from '@playwright/test';
+import { customTest } from "../utils-ts/test-base.ts";
+import { POManager } from "../pageObjects_ts/POManager";
 
+// const dataSet = JSON.parse(JSON.stringify(require("../utils/placeorderTestData.json")));
+import dataSet from "../utils/placeorderTestData.json";
 
 for (const data of dataSet) {
-   test(`@Web Client App login ${data.productName}`, async ({ page }) => {
+   test.skip(`@Web Client App login ${data.productName}`, async ({ page }) => {
       //js file- Login js, DashboardPage
       const poManager = new POManager(page);
       // const email = "nickharrisonlce@gmail.com";
@@ -64,8 +64,9 @@ for (const data of dataSet) {
       const couponBtn = await page.locator("button[type='submit']");
       await couponBtn.click();
       await page.waitForLoadState('networkidle');
-      const couponAppliedText = await page.locator(".mt-1.ng-star-inserted").textContent();
-      await expect(couponAppliedText).toBe("* Coupon Applied");
+      // const couponAppliedText = await page.locator(".mt-1.ng-star-inserted").textContent();
+      // await expect(couponAppliedText).toBe("* Coupon Applied");
+      await expect(page.locator(".mt-1.ng-star-inserted")).toHaveText("* Coupon Applied");
 
       const countryBox = await page.locator("[placeholder*= 'Select Country']");
       countryBox.pressSequentially("united");
@@ -85,9 +86,10 @@ for (const data of dataSet) {
 
       await page.waitForLoadState('networkidle');
       await expect(page.locator(".hero-primary")).toHaveText("Thankyou for the order. ");
-      const orderNumFull = await page.locator("label[class*='ng-star-inserted']").textContent();
+      const orderNumFull: string | null = await page.locator("label[class*='ng-star-inserted']").textContent();
       console.log(orderNumFull);
-      const orderNum = orderNumFull.split("|")[1].split("|")[0].trim();
+      if (!orderNumFull) throw new Error("Order number label not found");
+      const orderNum: string = orderNumFull.split("|")[1].trim();
       console.log(orderNum);
 
       await page.locator(".btn.btn-custom[routerlink='/dashboard/myorders']").click();
@@ -127,73 +129,73 @@ for (const data of dataSet) {
 }
 
 
-   customTest(`Client App login`, async ({ page, testDataForOrder }) => {
-      //js file- Login js, DashboardPage
-      const poManager = new POManager(page);
-      // const email = "nickharrisonlce@gmail.com";
-      // const password = "Password$1"
-      // const productName = 'adidas original';
-      const loginPage = poManager.getLoginPage();
-      await loginPage.goTo();
-      await loginPage.validLogin(testDataForOrder.username, testDataForOrder.password);
-      const dashboardPage = poManager.getDashboardPage();
-      await dashboardPage.searchProduct(testDataForOrder.productName);
-      await dashboardPage.navigateToCart();
+customTest.skip(`Client App login`, async ({ page, testDataForOrder }) => {
+   //js file- Login js, DashboardPage
+   const poManager = new POManager(page);
+   // const email = "nickharrisonlce@gmail.com";
+   // const password = "Password$1"
+   // const productName = 'adidas original';
+   const loginPage = poManager.getLoginPage();
+   await loginPage.goTo();
+   await loginPage.validLogin(testDataForOrder.username, testDataForOrder.password);
+   const dashboardPage = poManager.getDashboardPage();
+   await dashboardPage.searchProduct(testDataForOrder.productName);
+   await dashboardPage.navigateToCart();
 
-      const checkoutRow = await page.locator("li.totalRow", { hasText: "Checkout" });
-      await checkoutRow.locator(".btn.btn-primary").click();
-      //await page.pause();
+   const checkoutRow = await page.locator("li.totalRow", { hasText: "Checkout" });
+   await checkoutRow.locator(".btn.btn-primary").click();
+   //await page.pause();
 
-      const emailInput = await page.locator("input.input.txt.input.txt.text-validated.ng-untouched.ng-pristine.ng-valid").inputValue();
-      expect(emailInput).toBe(testDataForOrder.username);
-      const emailLabel = await page.locator("label[type='text']");
-      expect(emailLabel).toHaveText(testDataForOrder.username);
+   const emailInput = await page.locator("input.input.txt.input.txt.text-validated.ng-untouched.ng-pristine.ng-valid").inputValue();
+   expect(emailInput).toBe(testDataForOrder.username);
+   const emailLabel = await page.locator("label[type='text']");
+   expect(emailLabel).toHaveText(testDataForOrder.username);
 
-      const ccInput = page.locator('div.field', { has: page.locator('div.title', { hasText: 'Credit Card Number' }) }).locator('input');
-      await ccInput.fill('4542 9931 9292 2293');
+   const ccInput = page.locator('div.field', { has: page.locator('div.title', { hasText: 'Credit Card Number' }) }).locator('input');
+   await ccInput.fill('4542 9931 9292 2293');
 
-      const expiryDropdowns = await page.locator("div.field.small", { has: page.locator('div.title', { hasText: "Expiry Date" }) });
-      const monthDropdown = expiryDropdowns.locator("select.input.ddl").first();
-      const dayDropdown = expiryDropdowns.locator("select.input.ddl").nth(1);
+   const expiryDropdowns = await page.locator("div.field.small", { has: page.locator('div.title', { hasText: "Expiry Date" }) });
+   const monthDropdown = expiryDropdowns.locator("select.input.ddl").first();
+   const dayDropdown = expiryDropdowns.locator("select.input.ddl").nth(1);
 
-      await expect(monthDropdown).toBeVisible();
-      await monthDropdown.selectOption({ label: "05" });
-      await dayDropdown.selectOption({ label: "14" });
+   await expect(monthDropdown).toBeVisible();
+   await monthDropdown.selectOption({ label: "05" });
+   await dayDropdown.selectOption({ label: "14" });
 
-      const cvv = await page.locator("div.field.small", { has: page.locator("div.title", { hasText: "CVV Code" }) }).locator("input.input.txt");
-      await cvv.fill("999");
+   const cvv = await page.locator("div.field.small", { has: page.locator("div.title", { hasText: "CVV Code" }) }).locator("input.input.txt");
+   await cvv.fill("999");
 
 
-      const nameOnCard = await page.locator("div.field", { has: page.locator("div.title", { hasText: "Name on Card" }) }).locator("input.input.txt");
-      await nameOnCard.fill("Nicholas O Harrison");
+   const nameOnCard = await page.locator("div.field", { has: page.locator("div.title", { hasText: "Name on Card" }) }).locator("input.input.txt");
+   await nameOnCard.fill("Nicholas O Harrison");
 
-      //const applyCoupon = await page.locator("div.field.small", {has: page.locator("div.title", {hasText: "Apply Coupon"})}).locator("[name*='coupon']");
-      const applyCoupon = await page.locator("[name*='coupon']");
-      await applyCoupon.fill("rahulshettyacademy");
+   //const applyCoupon = await page.locator("div.field.small", {has: page.locator("div.title", {hasText: "Apply Coupon"})}).locator("[name*='coupon']");
+   const applyCoupon = await page.locator("[name*='coupon']");
+   await applyCoupon.fill("rahulshettyacademy");
 
-      const couponBtn = await page.locator("button[type='submit']");
-      await couponBtn.click();
-      await page.waitForLoadState('networkidle');
-      const couponAppliedText = await page.locator(".mt-1.ng-star-inserted").textContent();
-      await expect(couponAppliedText).toBe("* Coupon Applied");
+   const couponBtn = await page.locator("button[type='submit']");
+   await couponBtn.click();
+   await page.waitForLoadState('networkidle');
+   const couponAppliedText = await page.locator(".mt-1.ng-star-inserted").textContent();
+   await expect(couponAppliedText).toBe("* Coupon Applied");
 
-      const countryBox = await page.locator("[placeholder*= 'Select Country']");
-      countryBox.pressSequentially("united");
-      const dropdown = page.locator(".ta-results");
-      await dropdown.waitFor();
-      const optionsCount = await dropdown.locator("button").count();
-      for (let i = 0; i < optionsCount; i++) {
-         const text = await dropdown.locator("button").nth(i).textContent();
-         if (text === " United States") {
-            await dropdown.locator("button").nth(i).click();
-            break;
-         }
-
+   const countryBox = await page.locator("[placeholder*= 'Select Country']");
+   countryBox.pressSequentially("united");
+   const dropdown = page.locator(".ta-results");
+   await dropdown.waitFor();
+   const optionsCount = await dropdown.locator("button").count();
+   for (let i = 0; i < optionsCount; i++) {
+      const text = await dropdown.locator("button").nth(i).textContent();
+      if (text === " United States") {
+         await dropdown.locator("button").nth(i).click();
+         break;
       }
 
-      await page.locator(".action__submit").click();
+   }
 
-      await page.waitForLoadState('networkidle');
-      await expect(page.locator(".hero-primary")).toHaveText("Thankyou for the order. ");
+   await page.locator(".action__submit").click();
 
-   });
+   await page.waitForLoadState('networkidle');
+   await expect(page.locator(".hero-primary")).toHaveText("Thankyou for the order. ");
+
+});

@@ -1,0 +1,6 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","17581","@Web Client App login ZARA COAT 3","","2026-04-01","passed","2026-04-01","","ClientAppPO.spec.js","",""
+"","12783","@Web Client App login","","2026-04-01","passed","2026-04-01","","ClientAppOtherWay.spec.js","",""
+"","10","@Web Client App login","","2026-04-01","skipped","2026-04-01","","ClientApp.spec.js","",""
+"","11308","@Web popup validations","","2026-04-01","passed","2026-04-01","","moreValidations.spec.js","",""
+"","18521","@Web Client App login adidas original","","2026-04-01","passed","2026-04-01","","ClientAppPO.spec.js","",""
