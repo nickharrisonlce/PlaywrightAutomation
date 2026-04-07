@@ -6,16 +6,10 @@ const { expect } = require('@playwright/test');
 const playwright = require('@playwright/test');
 
 
-Given('a login to ecommerce application with {string} and {string}', {timeout: 100 * 1000}, async function (username, password) {
-    const browser = await playwright.chromium.launch({
-        headless: true
-    });
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    this.page = page;
-    this.username = username;
-    this.poManager = new POManager(page);
+Given('a login to ecommerce application with {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
+
     this.loginPage = this.poManager.getLoginPage();
+    this.username = username;
     await this.loginPage.goTo();
     await this.loginPage.validLogin(username, password);
     //return 'pending';
@@ -33,7 +27,7 @@ Then('verify {string} is displayed in the Cart', function (string) {
     //return 'pending';
 });
 
-When('enter valid details and place order', {timeout: 100 * 1000}, async function () {
+When('enter valid details and place order', { timeout: 100 * 1000 }, async function () {
     const page = this.page;
     const checkoutRow = await page.locator("li.totalRow", { hasText: "Checkout" });
     await checkoutRow.locator(".btn.btn-primary").click();
@@ -96,3 +90,21 @@ Then('verify order is present in order history', async function () {
     await expect(page.locator(".hero-primary")).toHaveText("Thankyou for the order. ");
     //return 'pending';
 });
+
+
+Given('a login to ecommerce2 application with {string} and {string}', async function (username, password) {
+    const userName = this.page.locator('#username');
+    const signIn = this.page.locator("#signInBtn");
+    await this.page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    await this.page.locator('#username').fill(username); // use fill, type is deprecated
+    await this.page.locator("[type='password']").fill(password);
+    await this.page.locator("#signInBtn").click();
+});
+
+
+Then('verify error message is displayed', async function () {
+    console.log(await this.page.locator("[style*='block']").textContent());
+    await expect(this.page.locator("[style*='block']")).toContainText('Incorrect');
+});
+
+
