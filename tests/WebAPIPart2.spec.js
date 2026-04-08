@@ -1,3 +1,4 @@
+// Author: Nicholas H
 //Login from UI -> collect all storage state of browser in json file
 
 const { test, expect } = require('@playwright/test');
@@ -33,7 +34,7 @@ test('@API Client App login', async ({ }) => {
 
 
 
-   await page.waitForLoadState('networkidle');
+   //await page.waitForLoadState('networkidle');
    await page.locator(".card-body b").first().waitFor();
    const titles = await page.locator(".card-body b").allTextContents();
    console.log(titles);
